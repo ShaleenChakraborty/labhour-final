@@ -367,14 +367,25 @@ export default function ElectrospinningSetup({ params }) {
       </div>
 
       {/* 3D Canvas */}
-      <Canvas camera={{ position: [15, 8, 25], fov: 40 }}>
+      <Canvas 
+        camera={{ position: [15, 8, 25], fov: 40 }}
+        dpr={1}
+        gl={{ 
+          powerPreference: "high-performance",
+          antialias: false,
+          stencil: false,
+          depth: true
+        }}
+      >
         <ambientLight intensity={0.5} />
         <directionalLight position={[10, 10, 5]} intensity={1.5} />
         <pointLight position={[-10, 0, -5]} intensity={1} color="#0ea5e9" />
-        <Environment preset="studio" />
         
-        {/* Contact Shadow for realism */}
-        <ContactShadows resolution={1024} scale={30} blur={2.5} opacity={0.4} far={20} color="#000000" position={[0, -8, 0]} />
+        {/* Replaced heavy Environment with simpler lights for stability */}
+        <pointLight position={[5, 5, 5]} intensity={0.5} />
+        
+        {/* Contact Shadow for realism - reduced resolution */}
+        <ContactShadows resolution={512} scale={30} blur={2.5} opacity={0.4} far={20} color="#000000" position={[0, -8, 0]} />
 
         <OrbitControls 
           enablePan={true} 

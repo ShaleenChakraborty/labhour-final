@@ -180,14 +180,27 @@ export default function FiberVisualizer({ diameter, structure, voltage, distance
           scaleBarRef={scaleBarRef} 
         />
         
-        <Canvas camera={{ position: [0, 0, 8], fov: 45 }}>
-          <ambientLight intensity={0.4} />
+        <Canvas 
+          camera={{ position: [0, 0, 8], fov: 45 }}
+          dpr={1} 
+          gl={{ 
+            powerPreference: "high-performance",
+            antialias: false,
+            stencil: false,
+            depth: true
+          }}
+          onCreated={({ gl }) => {
+            gl.setClearColor('#010409');
+          }}
+        >
+          <ambientLight intensity={0.5} />
           <directionalLight position={[10, 10, 5]} intensity={1.5} color="#bae6fd" />
           <pointLight position={[-10, 10, -5]} intensity={2} color="#0ea5e9" />
           
-          <color attach="background" args={["#010409"]} /> 
-          <Stars radius={100} depth={50} count={2000} factor={4} saturation={0} fade speed={1} />
-          <Environment preset="night" />
+          <Stars radius={100} depth={50} count={1000} factor={4} saturation={0} fade speed={1} />
+          {/* Replaced heavy Environment with simpler lights for stability */}
+          <pointLight position={[0, 5, 10]} intensity={1} />
+          <pointLight position={[0, -5, -10]} intensity={0.5} color="#38bdf8" />
 
           <Float speed={1.5} rotationIntensity={0.5} floatIntensity={0.8}>
             <NanofiberWeb diameter={diameter} structure={structure} />
@@ -207,7 +220,7 @@ export default function FiberVisualizer({ diameter, structure, voltage, distance
             minDistance={2} 
             maxDistance={80} 
           />
-          <ContactShadows resolution={1024} scale={15} blur={3} opacity={0.5} far={10} color="#000000" position={[0, -4, 0]} />
+          <ContactShadows resolution={512} scale={15} blur={3} opacity={0.5} far={10} color="#000000" position={[0, -4, 0]} />
         </Canvas>
       </div>
     </div>
