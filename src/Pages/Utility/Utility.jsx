@@ -66,7 +66,7 @@ function Utility() {
       {/* Key Features */}
       <section className="box features-section animate-slide-up" style={{ animationDelay: '0.1s' }}>
         <div className="section-header">
-          <span className="header-icon">🚀</span>
+          <span className="header-icon"></span>
           <h3>Key Features</h3>
         </div>
 

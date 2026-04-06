@@ -5,6 +5,7 @@ import defaultDatasetRaw from "../../data/N6_Copy.csv?raw";
 import FiberVisualizer from "../FiberVisualizer/FiberVisualizer";
 import ElectrospinningSetup from "../ElectrospinningSetup/ElectrospinningSetup";
 import ReportGenerator from "../ReportGenerator/ReportGenerator";
+import ErrorBoundary from "../ErrorBoundary/ErrorBoundary";
 
 function MaterialSynthesize({
   name,
@@ -62,6 +63,16 @@ function MaterialSynthesize({
     setParams(p);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [coeffs]); // We only want this to run when the MATERIAL (coeffs) actually changes
+
+  // DIAGNOSTIC LOGGING for re-renders
+  const renderCount = useRef(0);
+  useEffect(() => {
+    renderCount.current += 1;
+    if (renderCount.current > 50) {
+      console.warn("MATERIAL SYNTHESIZE: High render count detected!", renderCount.current);
+    }
+    console.info(`MATERIAL SYNTHESIZE RENDER: #${renderCount.current} (Mode: ${mode}, ShowResults: ${showResults})`);
+  });
 
   const INTERCEPT = typeof intercept !== "undefined" ? intercept : 50;
   const BASE = base || {};
@@ -768,33 +779,35 @@ function MaterialSynthesize({
 
             {/* 3D VISUALIZER: Morphological OR Apparatus */}
             <div className="results-visualizer-section">
-              <div className="visualizer-tabs">
-                <button 
-                  className={`vis-tab ${activeVisualizer === 'fesem' ? 'active' : ''}`}
-                  onClick={() => setActiveVisualizer('fesem')}
-                >
-                  🔬 FESEM Morphology
-                </button>
-                <button 
-                  className={`vis-tab ${activeVisualizer === 'setup' ? 'active' : ''}`}
-                  onClick={() => setActiveVisualizer('setup')}
-                >
-                  ⚙️ Apparatus Setup
-                </button>
-              </div>
+              <ErrorBoundary>
+                <div className="visualizer-tabs">
+                  <button 
+                    className={`vis-tab ${activeVisualizer === 'fesem' ? 'active' : ''}`}
+                    onClick={() => setActiveVisualizer('fesem')}
+                  >
+                    🔬 FESEM Morphology
+                  </button>
+                  <button 
+                    className={`vis-tab ${activeVisualizer === 'setup' ? 'active' : ''}`}
+                    onClick={() => setActiveVisualizer('setup')}
+                  >
+                    ⚙️ Apparatus Setup
+                  </button>
+                </div>
 
-              {activeVisualizer === 'fesem' ? (
-                <FiberVisualizer
-                  diameter={diameter || (predictions.length > 0 ? predictions[0].D_pred : parseFloat(target) || 200)}
-                  structure={specs?.structure}
-                  voltage={params.voltage || (predictions.length > 0 ? predictions[0].V : 15)}
-                  distance={params.distance || (predictions.length > 0 ? predictions[0].DIST : 15)}
-                />
-              ) : (
-                <ElectrospinningSetup 
-                  params={computedParams || (predictions.length > 0 ? predictions[0] : params)}
-                />
-              )}
+                {activeVisualizer === 'fesem' ? (
+                  <FiberVisualizer
+                    diameter={diameter || (predictions.length > 0 ? predictions[0].D_pred : parseFloat(target) || 200)}
+                    structure={specs?.structure}
+                    voltage={params.voltage || (predictions.length > 0 ? predictions[0].V : 15)}
+                    distance={params.distance || (predictions.length > 0 ? predictions[0].DIST : 15)}
+                  />
+                ) : (
+                  <ElectrospinningSetup 
+                    params={computedParams || (predictions.length > 0 ? predictions[0] : params)}
+                  />
+                )}
+              </ErrorBoundary>
             </div>
           </div>
         </div>

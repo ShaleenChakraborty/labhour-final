@@ -19,14 +19,14 @@ const ReportGenerator = React.forwardRef(({
         {/* Header section */}
         <div className="report-header">
           <div className="header-logos">
-            <img 
-              src="https://upload.wikimedia.org/wikipedia/en/thumb/e/ef/Bharati_Vidyapeeth_Logo.svg/150px-Bharati_Vidyapeeth_Logo.svg.png" 
-              alt="Bharati Vidyapeeth Logo" 
+            <img
+              src="https://upload.wikimedia.org/wikipedia/en/thumb/e/ef/Bharati_Vidyapeeth_Logo.svg/150px-Bharati_Vidyapeeth_Logo.svg.png"
+              alt="Bharati Vidyapeeth Logo"
               className="uni-logo"
             />
             <div className="header-titles">
               <h1 className="report-main-title">LabHour Synthesis Report</h1>
-              <h2 className="report-sub-title">Department of Nanomaterial Research</h2>
+              <h2 className="report-sub-title">Nanotechnology Analysis</h2>
               <p className="report-timestamp">Generated on: {timestamp}</p>
             </div>
           </div>
@@ -99,7 +99,7 @@ const ReportGenerator = React.forwardRef(({
                   <h2>{params.targetDiameter || "N/A"} nm</h2>
                 </div>
                 <h4>Estimated Ideal Synthesizer Parameters</h4>
-                
+
                 {predictions && predictions.length > 0 ? (
                   <table className="report-table results-table">
                     <thead>

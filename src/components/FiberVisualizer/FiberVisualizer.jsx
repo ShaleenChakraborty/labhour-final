@@ -79,32 +79,38 @@ function CameraTracker({ diameter, magRef, scaleTextRef, scaleBarRef }) {
     const vFov = (camera.fov * Math.PI) / 180;
     const visibleHeightWorld = 2 * Math.tan(vFov / 2) * dist;
     
+    // Safety check to avoid zero or NaN dimensions
     if (size.height > 0 && isFinite(visibleHeightWorld) && visibleHeightWorld > 0) {
       const worldUnitsPerPixel = visibleHeightWorld / size.height;
       const nmPerPixel = worldUnitsPerPixel * nanometersPerWorldUnit;
       
+      if (!isFinite(nmPerPixel) || nmPerPixel <= 0) return;
+
       const initialBarNm = 100 * nmPerPixel; // Base target of 100px width
       
-      if (initialBarNm > 0 && isFinite(initialBarNm)) {
-        const magnitude = Math.pow(10, Math.floor(Math.log10(initialBarNm)));
-        const normalized = initialBarNm / magnitude;
-        
-        let niceMultiplier;
-        if (normalized < 1.5) niceMultiplier = 1;
-        else if (normalized < 3.5) niceMultiplier = 2;
-        else if (normalized < 7.5) niceMultiplier = 5;
-        else niceMultiplier = 10;
+      const magnitude = Math.pow(10, Math.floor(Math.log10(initialBarNm)));
+      const normalized = initialBarNm / magnitude;
+      
+      let niceMultiplier;
+      if (normalized < 1.5) niceMultiplier = 1;
+      else if (normalized < 3.5) niceMultiplier = 2;
+      else if (normalized < 7.5) niceMultiplier = 5;
+      else niceMultiplier = 10;
 
-        const targetNm = niceMultiplier * magnitude;
-        const pixelsWidth = targetNm / nmPerPixel;
+      const targetNm = niceMultiplier * magnitude;
+      const pixelsWidth = targetNm / nmPerPixel;
 
-        if (scaleTextRef.current) {
-          scaleTextRef.current.textContent = targetNm >= 1000 
-            ? `${(targetNm/1000).toFixed(targetNm % 1000 === 0 ? 0 : 1)} μm` 
-            : `${targetNm.toFixed(0)} nm`;
-        }
-        if (scaleBarRef.current && isFinite(pixelsWidth)) {
-          scaleBarRef.current.style.width = `${Math.max(10, pixelsWidth)}px`;
+      if (scaleTextRef.current) {
+        scaleTextRef.current.textContent = targetNm >= 1000 
+          ? `${(targetNm/1000).toFixed(targetNm % 1000 === 0 ? 0 : 1)} μm` 
+          : `${targetNm.toFixed(0)} nm`;
+      }
+      
+      if (scaleBarRef.current && isFinite(pixelsWidth) && pixelsWidth > 0) {
+        // Use requestAnimationFrame for style updates to avoid layout thrashing
+        const widthVal = `${Math.max(10, Math.min(size.width * 0.8, pixelsWidth))}px`;
+        if (scaleBarRef.current.style.width !== widthVal) {
+          scaleBarRef.current.style.width = widthVal;
         }
       }
     }
