@@ -116,40 +116,53 @@ function DrumRoller({ playbackSpeed, isPlaying, resetTrigger }) {
     }
   }, [resetTrigger]);
   
-  // Rotate drum
-  useFrame((state, delta) => {
-    if (!isPlaying) return;
+    // Use a ref to track frame count to throttle state updates
+    const frameCount = useRef(0);
 
-    if (drumRef.current) {
-      // RPM scaled by playback speed
-      drumRef.current.rotation.x -= delta * playbackSpeed * 2.0;
-    }
+    // Rotate drum
+    useFrame((state, delta) => {
+      if (!isPlaying || !isFinite(delta)) return;
 
-    if (matRef.current) {
-      // Very slowly increase opacity representing the massive collection of invisible nanofibers turning into a visible mat
-      if (matRef.current.material.opacity < 0.95) {
-        matRef.current.material.opacity += (delta * playbackSpeed * 0.012);
+      if (drumRef.current) {
+        // RPM scaled by playback speed
+        const rotationDelta = delta * Math.min(playbackSpeed, 10) * 2.0;
+        if (isFinite(rotationDelta)) {
+          drumRef.current.rotation.x -= rotationDelta;
+        }
       }
-      // Slowly increase thickness (radius)
-      if (matRef.current.scale.x < 1.04) {
-        const s = matRef.current.scale.x + (delta * playbackSpeed * 0.00015);
-        matRef.current.scale.set(s, 1, s);
+
+      if (matRef.current) {
+        // Very slowly increase opacity representing the massive collection of invisible nanofibers turning into a visible mat
+        if (matRef.current.material.opacity < 0.95) {
+          const opacityGain = delta * Math.min(playbackSpeed, 10) * 0.012;
+          if (isFinite(opacityGain)) {
+            matRef.current.material.opacity += opacityGain;
+          }
+        }
+        // Slowly increase thickness (radius)
+        if (matRef.current.scale.x < 1.04) {
+          const scaleGain = delta * Math.min(playbackSpeed, 10) * 0.00015;
+          const s = matRef.current.scale.x + scaleGain;
+          if (isFinite(s)) {
+            matRef.current.scale.set(s, 1, s);
+          }
+        }
       }
-    }
-    
-    // Periodically add new super-thin fiber lines for the visual effect of individual threads landing
-    if (Math.random() < 0.15 * playbackSpeed) {
-      setFibers(prev => {
-        const updated = [...prev, {
-          id: Date.now() + Math.random(),
-          angle: drumRef.current.rotation.x,
-          offsetY: (Math.random() - 0.5) * 5.8 // Spread along the drum width
-        }];
-        if (updated.length > 150) return updated.slice(updated.length - 150);
-        return updated;
-      });
-    }
-  });
+      
+      // Periodically add new super-thin fiber lines for the visual effect
+      // Throttle to every 5 frames to reduce React overhead
+      frameCount.current++;
+      if (frameCount.current % 5 === 0 && Math.random() < 0.3 * (playbackSpeed / 5)) {
+        setFibers(prev => {
+          const updated = [...prev, {
+            id: Date.now() + Math.random(),
+            angle: drumRef.current ? drumRef.current.rotation.x : 0,
+            offsetY: (Math.random() - 0.5) * 5.8 
+          }];
+          return updated.length > 50 ? updated.slice(updated.length - 50) : updated;
+        });
+      }
+    });
 
   return (
     <group position={[0, -5, 0]}>
