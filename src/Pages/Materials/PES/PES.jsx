@@ -1,9 +1,10 @@
+import { useMemo } from "react";
 import MaterialSynthesize from "../../../components/MaterialSynthesize/MaterialSynthesize";
 import datasetRaw from "../../../../src/data/PES.csv?raw";
 import "./PES.css";
 
 function PES() {
-  const data = {
+  const data = useMemo(() => ({
     name: "PES (Polyethersulfone)",
     desc: "Overview and synthesis guidance for PES (sample content).",
     modelInfo: {
@@ -13,29 +14,26 @@ function PES() {
       training: "2,501 synthesis experiments",
     },
     specs: {
-    formula: "(C12H8O3S)n",
-    density: "1.37 g/cm³",
-    structure: "(Amorphopus) Weak crystalline structure",
-    molecularWeight: "65,800 g/mol (approx)",
-    meltingPoint: "225-230°C"
+      formula: "(C12H8O3S)n",
+      density: "1.37 g/cm³",
+      structure: "(Amorphopus) Weak crystalline structure",
+      molecularWeight: "65,800 g/mol (approx)",
+      meltingPoint: "225-230°C"
     },
-
     paper: {
-    title: " Parametrization Study of Electrospun Nanofiber Including LiCl Using Response Surface Methodology (RSM) for Water Treatment Application",
-    authors: "Jiyeol Bae et. al.",
-    journal: "Applied Sciences",
-    year: "2020",
-    doi: "https://doi.org/10.3390/app10207295"
-  },
+      title: " Parametrization Study of Electrospun Nanofiber Including LiCl Using Response Surface Methodology (RSM) for Water Treatment Application",
+      authors: "Jiyeol Bae et. al.",
+      journal: "Applied Sciences",
+      year: "2020",
+      doi: "https://doi.org/10.3390/app10207295"
+    },
     features: ["Concentration", "Flow Rate", "Collector-to-drum Distance", "Applied Voltage"],
     metrics: {
-  r2: "0.9987",
-  mse: "2.3969",
-  mae: "0.82",
-  rmse: "1.548"
-},
-    // Coefficients map to the input fields in MaterialSynthesize:
-    // concentration -> CONC, flow -> FR, distance -> DIST, voltage -> V
+      r2: "0.9987",
+      mse: "2.3969",
+      mae: "0.82",
+      rmse: "1.548"
+    },
     coeffs: {
       concentration: 20.9,
       flow: 136,
@@ -52,7 +50,7 @@ function PES() {
       flow: 'Flow Rate (cm)',
       distance: 'Collector-to-drum distance (cm)'
     },
-  };
+  }), []);
 
   return <MaterialSynthesize {...data} />;
 }

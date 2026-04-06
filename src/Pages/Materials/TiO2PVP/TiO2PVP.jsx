@@ -1,8 +1,9 @@
+import { useMemo } from "react";
 import MaterialSynthesize from "../../../components/MaterialSynthesize/MaterialSynthesize";
 import "./TiO2PVP.css";
 
 function TiO2PVP() {
-  const data = {
+  const data = useMemo(() => ({
     name: "TiO2 + PVP",
     desc: "TiO2/PVP synthesis prediction using the five-parameter diameter model.",
     modelInfo: {
@@ -12,29 +13,26 @@ function TiO2PVP() {
       training: "1,171 synthesis experiments",
     },
     specs: {
-    formula: "(TiO2)n + (C6H9NO)m",
-    density: "1.5 -- 2.5 g/cm³",
-    structure: "Tetragonal anatase TiO2 with PVP polymer chains",
-    molecularWeight: "1,300,000 g/mol (approx)",
-    meltingPoint: "180°C"
+      formula: "(TiO2)n + (C6H9NO)m",
+      density: "1.5 -- 2.5 g/cm³",
+      structure: "Tetragonal anatase TiO2 with PVP polymer chains",
+      molecularWeight: "1,300,000 g/mol (approx)",
+      meltingPoint: "180°C"
     },
-
     paper: {
-    title: "Data Driven modeling of TiO2 PVP nanofiber diameter using LSTM and regression for enhanced functional performance",
-    authors: "Harshada Mhetre et. al.",
-    journal: "Applied Sciences",
-    year: "January 2025",
-    doi: "https://doi.org/10.1007/s42452-025-06823-7"
-  },
+      title: "Data Driven modeling of TiO2 PVP nanofiber diameter using LSTM and regression for enhanced functional performance",
+      authors: "Harshada Mhetre et. al.",
+      journal: "Applied Sciences",
+      year: "January 2025",
+      doi: "https://doi.org/10.1007/s42452-025-06823-7"
+    },
     features: ["TTIP Concentration", "PVP Concentration", "Flow Rate", "Collector-to-drum Distance", "Applied Voltage"],
     metrics: {
-  r2: "0.9996",
-  mse: "0.69",
-  mae: "0.53",
-  rmse: "0.83"
-},
-    // Coefficients map to the input fields in MaterialSynthesize:
-    // concentration -> CONC, flow -> FR, distance -> DIST, voltage -> V
+      r2: "0.9996",
+      mse: "0.69",
+      mae: "0.53",
+      rmse: "0.83"
+    },
     coeffs: {
       concentration: 20.9,
       flow: 136,
@@ -58,7 +56,7 @@ function TiO2PVP() {
       flow: "Flow Rate (mL/hr)",
       distance: "Collector-to-drum distance (cm)",
     },
-  };
+  }), []);
 
   return <MaterialSynthesize {...data} />;
 }

@@ -69,7 +69,8 @@ function CameraTracker({ diameter, magRef, scaleTextRef, scaleBarRef }) {
     const dist = camera.position.length();
 
     // 1. Updating Mag
-    const mag = (250 / dist).toFixed(2);
+    const magRaw = dist > 0.1 ? (250 / dist) : 2500;
+    const mag = magRaw.toFixed(2);
     if (magRef.current) {
       magRef.current.textContent = `${mag} k X`;
     }
@@ -78,31 +79,33 @@ function CameraTracker({ diameter, magRef, scaleTextRef, scaleBarRef }) {
     const vFov = (camera.fov * Math.PI) / 180;
     const visibleHeightWorld = 2 * Math.tan(vFov / 2) * dist;
     
-    if (size.height > 0) {
+    if (size.height > 0 && isFinite(visibleHeightWorld) && visibleHeightWorld > 0) {
       const worldUnitsPerPixel = visibleHeightWorld / size.height;
       const nmPerPixel = worldUnitsPerPixel * nanometersPerWorldUnit;
       
       const initialBarNm = 100 * nmPerPixel; // Base target of 100px width
       
-      const magnitude = Math.pow(10, Math.floor(Math.log10(initialBarNm)));
-      const normalized = initialBarNm / magnitude;
-      
-      let niceMultiplier;
-      if (normalized < 1.5) niceMultiplier = 1;
-      else if (normalized < 3.5) niceMultiplier = 2;
-      else if (normalized < 7.5) niceMultiplier = 5;
-      else niceMultiplier = 10;
+      if (initialBarNm > 0 && isFinite(initialBarNm)) {
+        const magnitude = Math.pow(10, Math.floor(Math.log10(initialBarNm)));
+        const normalized = initialBarNm / magnitude;
+        
+        let niceMultiplier;
+        if (normalized < 1.5) niceMultiplier = 1;
+        else if (normalized < 3.5) niceMultiplier = 2;
+        else if (normalized < 7.5) niceMultiplier = 5;
+        else niceMultiplier = 10;
 
-      const targetNm = niceMultiplier * magnitude;
-      const pixelsWidth = targetNm / nmPerPixel;
+        const targetNm = niceMultiplier * magnitude;
+        const pixelsWidth = targetNm / nmPerPixel;
 
-      if (scaleTextRef.current) {
-        scaleTextRef.current.textContent = targetNm >= 1000 
-          ? `${(targetNm/1000).toFixed(targetNm % 1000 === 0 ? 0 : 1)} μm` 
-          : `${targetNm.toFixed(0)} nm`;
-      }
-      if (scaleBarRef.current) {
-        scaleBarRef.current.style.width = `${Math.max(10, pixelsWidth)}px`;
+        if (scaleTextRef.current) {
+          scaleTextRef.current.textContent = targetNm >= 1000 
+            ? `${(targetNm/1000).toFixed(targetNm % 1000 === 0 ? 0 : 1)} μm` 
+            : `${targetNm.toFixed(0)} nm`;
+        }
+        if (scaleBarRef.current && isFinite(pixelsWidth)) {
+          scaleBarRef.current.style.width = `${Math.max(10, pixelsWidth)}px`;
+        }
       }
     }
   });

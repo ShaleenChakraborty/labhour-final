@@ -60,7 +60,8 @@ function MaterialSynthesize({
     const p = {};
     Object.keys(COEFFS).forEach((k) => (p[k] = params[k] || ""));
     setParams(p);
-  }, [coeffs]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [coeffs]); // We only want this to run when the MATERIAL (coeffs) actually changes
 
   const INTERCEPT = typeof intercept !== "undefined" ? intercept : 50;
   const BASE = base || {};
@@ -90,15 +91,26 @@ function MaterialSynthesize({
       const val = parseFloat(params[key]) || 0;
       sum += (COEFFS[key] || 0) * val;
     });
-    setDiameter(Number(sum.toFixed(2)));
+
+    const result = Number(sum.toFixed(2));
+    if (isNaN(result)) {
+      setDiameter(0);
+    } else {
+      setDiameter(result);
+    }
+
     setComputedParams(null);
     setRecommendedParams(null);
     setPredictions([]);
     setShowResults(true);
     setModalOpen(false);
+    
+    // Smooth scroll to results
     setTimeout(() => {
-      resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 100);
+      if (resultsRef.current) {
+        resultsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 150);
   };
 
   const calcInputsFromTarget = () => {

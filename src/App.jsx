@@ -11,7 +11,6 @@ import TiO2PVP from "./Pages/Materials/TiO2PVP/TiO2PVP";
 import ZnOPVP from "./Pages/Materials/ZnOPVP/ZnOPVP";
 import Profile from "./Pages/Profile/Profile";
 import { SearchProvider } from "./context/SearchContext";
-import SplashOverlay from "./components/SplashOverlay/SplashOverlay";
 
 // 🎨 GLOBAL STYLE CONSOLIDATION (Force Inclusivity)
 import "./index.css";
@@ -35,7 +34,6 @@ function App() {
 
   return (
     <SearchProvider>
-      <SplashOverlay duration={4000} />
       <BrowserRouter>
         <Routes>
 
