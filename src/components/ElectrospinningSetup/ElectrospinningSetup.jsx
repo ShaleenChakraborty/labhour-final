@@ -99,16 +99,15 @@ function LiquidBeam({ flowRate, playbackSpeed, isPlaying }) {
 function DrumRoller({ playbackSpeed, isPlaying, resetTrigger }) {
   const drumRef = useRef();
   const matRef = useRef();
-  const [fibers, setFibers] = useState([]);
+  // Fixed: Remove the fibers state entirely. 
+  // Updating state in useFrame (60-144fps) is the primary cause of desktop freezes.
+  // Instead, we will simulate the fiber build-up solely through the matRef.
 
   // Handle Restart
   useEffect(() => {
     if (resetTrigger > 0) {
-      setFibers([]);
       if (matRef.current) {
-        if (Array.isArray(matRef.current.material)) {
-          matRef.current.material.forEach(m => m.opacity = 0.0);
-        } else if (matRef.current.material) {
+        if (matRef.current.material) {
           matRef.current.material.opacity = 0.0;
         }
         matRef.current.scale.setScalar(1);
@@ -116,53 +115,40 @@ function DrumRoller({ playbackSpeed, isPlaying, resetTrigger }) {
     }
   }, [resetTrigger]);
   
-    // Use a ref to track frame count to throttle state updates
-    const frameCount = useRef(0);
+  // Rotate drum
+  useFrame((state, delta) => {
+    if (!isPlaying || !isFinite(delta)) return;
 
-    // Rotate drum
-    useFrame((state, delta) => {
-      if (!isPlaying || !isFinite(delta)) return;
+    // Safety: Cap delta to prevent huge jumps from tab switching
+    const safeDelta = Math.min(delta, 0.1);
 
-      if (drumRef.current) {
-        // RPM scaled by playback speed
-        const rotationDelta = delta * Math.min(playbackSpeed, 10) * 2.0;
-        if (isFinite(rotationDelta)) {
-          drumRef.current.rotation.x -= rotationDelta;
+    if (drumRef.current) {
+      // RPM scaled by playback speed
+      const rotationDelta = safeDelta * Math.min(playbackSpeed, 10) * 2.0;
+      if (isFinite(rotationDelta)) {
+        drumRef.current.rotation.x -= rotationDelta;
+      }
+    }
+
+    if (matRef.current) {
+      // Very slowly increase opacity representing the massive collection of invisible nanofibers turning into a visible mat
+      // Increased speed slightly to compensate for the removal of individual fiber lines
+      if (matRef.current.material.opacity < 0.95) {
+        const opacityGain = safeDelta * Math.min(playbackSpeed, 10) * 0.025;
+        if (isFinite(opacityGain)) {
+          matRef.current.material.opacity += opacityGain;
         }
       }
-
-      if (matRef.current) {
-        // Very slowly increase opacity representing the massive collection of invisible nanofibers turning into a visible mat
-        if (matRef.current.material.opacity < 0.95) {
-          const opacityGain = delta * Math.min(playbackSpeed, 10) * 0.012;
-          if (isFinite(opacityGain)) {
-            matRef.current.material.opacity += opacityGain;
-          }
-        }
-        // Slowly increase thickness (radius)
-        if (matRef.current.scale.x < 1.04) {
-          const scaleGain = delta * Math.min(playbackSpeed, 10) * 0.00015;
-          const s = matRef.current.scale.x + scaleGain;
-          if (isFinite(s)) {
-            matRef.current.scale.set(s, 1, s);
-          }
+      // Slowly increase thickness (radius)
+      if (matRef.current.scale.x < 1.05) {
+        const scaleGain = safeDelta * Math.min(playbackSpeed, 10) * 0.0003;
+        const s = matRef.current.scale.x + scaleGain;
+        if (isFinite(s)) {
+          matRef.current.scale.set(s, 1, s);
         }
       }
-      
-      // Periodically add new super-thin fiber lines for the visual effect
-      // Throttle to every 5 frames to reduce React overhead
-      frameCount.current++;
-      if (frameCount.current % 5 === 0 && Math.random() < 0.3 * (playbackSpeed / 5)) {
-        setFibers(prev => {
-          const updated = [...prev, {
-            id: Date.now() + Math.random(),
-            angle: drumRef.current ? drumRef.current.rotation.x : 0,
-            offsetY: (Math.random() - 0.5) * 5.8 
-          }];
-          return updated.length > 50 ? updated.slice(updated.length - 50) : updated;
-        });
-      }
-    });
+    }
+  });
 
   return (
     <group position={[0, -5, 0]}>
@@ -172,16 +158,8 @@ function DrumRoller({ playbackSpeed, isPlaying, resetTrigger }) {
           <meshStandardMaterial color="#334155" metalness={0.9} roughness={0.4} />
         </Cylinder>
         
-        {/* Depositing Fibers on the drum - super thin & faint */}
-        {fibers.map(f => (
-          <group key={f.id} rotation={[-(f.angle), 0, 0]}>
-             <Cylinder args={[1.51, 1.51, 0.008, 32, 1, true, 0, Math.PI / 2]} position={[f.offsetY, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
-               <meshBasicMaterial color="#ffffff" transparent opacity={0.15} side={THREE.DoubleSide} />
-             </Cylinder>
-          </group>
-        ))}
-
         {/* The overall collected nanofiber mat slowly fading in over time */}
+        {/* We use a slightly noisy texture or just the surface to represent the mat */}
         <Cylinder ref={matRef} args={[1.505, 1.505, 5.9, 64]} rotation={[0, 0, Math.PI / 2]}>
           <meshStandardMaterial 
             color="#f8fafc" 
