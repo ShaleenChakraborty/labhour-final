@@ -98,10 +98,10 @@ function Home() {
       <h2 className="page-title">Material Catalog</h2>
       <p className="page-subtitle">Select a material to view specifications and synthesis predictions</p>
 
-      <div className="grid">
+      <div className="dashboard-catalog-grid">
         {filteredMaterials.length > 0 ? (
           filteredMaterials.map((mat, index) => (
-            <div className="card" key={index}>
+            <div className="material-card" key={index}>
               <div className="category">{mat.category}</div>
               <h3>{mat.name}</h3>
               <p className="desc">{mat.desc}</p>
