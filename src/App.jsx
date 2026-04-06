@@ -13,6 +13,16 @@ import Profile from "./Pages/Profile/Profile";
 import { SearchProvider } from "./context/SearchContext";
 import SplashOverlay from "./components/SplashOverlay/SplashOverlay";
 
+// 🎨 GLOBAL STYLE CONSOLIDATION (Force Inclusivity)
+import "./index.css";
+import "./Pages/Dashboard/Dashboard.css";
+import "./Pages/Home/Home.css";
+import "./components/MaterialSynthesize/MaterialSynthesize.css";
+import "./Pages/About/About.css";
+import "./Pages/Utility/Utility.css";
+import "./Pages/Contact/Contact.css";
+import "./Pages/Profile/Profile.css";
+
 import { useEffect } from "react";
 
 function App() {
