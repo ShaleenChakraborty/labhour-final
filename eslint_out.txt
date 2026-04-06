@@ -1,0 +1,99 @@
+
+C:\Users\Shaleen\Downloads\Labhour-work\Labhour-work\frontend\src\Pages\Home\Home.jsx
+  9:28  error  'setSelectedMaterial' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\Shaleen\Downloads\Labhour-work\Labhour-work\frontend\src\Pages\Profile\Profile.jsx
+  21:7  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  19 |     if (savedData) {
+  20 |       const data = JSON.parse(savedData);
+> 21 |       setProfileData(data);
+     |       ^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  22 |       setPreview(data.profilePicture);
+  23 |     }
+  24 |   }, []);  react-hooks/set-state-in-effect
+
+C:\Users\Shaleen\Downloads\Labhour-work\Labhour-work\frontend\src\components\Header\Header.jsx
+  13:5  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  11 |     // Get username from localStorage
+  12 |     const user = localStorage.getItem("username") || "Guest";
+> 13 |     setUsername(user);
+     |     ^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  14 |   }, []);
+  15 |
+  16 |   const handleSearchChange = (e) => {  react-hooks/set-state-in-effect
+
+C:\Users\Shaleen\Downloads\Labhour-work\Labhour-work\frontend\src\components\MaterialSynthesize\MaterialSynthesize.jsx
+   33:9   error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  31 |     if (runTour) {
+  32 |       if (stepIndex === 3) {
+> 33 |         setModalOpen(true);
+     |         ^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  34 |         setMode("choose");
+  35 |       } else if (stepIndex === 4) {
+  36 |         setModalOpen(true);                                                                                         react-hooks/set-state-in-effect
+   56:10  error    'uploadedData' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               no-unused-vars
+   59:10  error    'fileName' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   no-unused-vars
+   62:16  error    'setTopN' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    no-unused-vars
+   63:20  error    'setConcStep' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                no-unused-vars
+   64:21  error    'setTolerance' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               no-unused-vars
+   70:5   error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  68 |     const p = {};
+  69 |     Object.keys(COEFFS).forEach((k) => (p[k] = params[k] || ""));
+> 70 |     setParams(p);
+     |     ^^^^^^^^^ Avoid calling setState() directly within an effect
+  71 |   }, [coeffs]);
+  72 |
+  73 |   const INTERCEPT = typeof intercept !== "undefined" ? intercept : 50;                                                                          react-hooks/set-state-in-effect
+   71:6   warning  React Hook useEffect has missing dependencies: 'COEFFS' and 'params'. Either include them or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   react-hooks/exhaustive-deps
+  304:9   error    'handleFileUpload' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           no-unused-vars
+  324:16  error    'err' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            no-unused-vars
+  347:9   error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  345 |       const parsed = parseCSV(source);
+  346 |       if (!parsed || parsed.length === 0) {
+> 347 |         setParsingError("Embedded dataset parsed but contains no valid rows.");
+      |         ^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  348 |         setUploadedData(null);
+  349 |         setModels(null);
+  350 |         setFileName("");  react-hooks/set-state-in-effect
+  364:6   warning  React Hook useEffect has missing dependencies: 'buildModels' and 'models'. Either include them or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              react-hooks/exhaustive-deps
+
+C:\Users\Shaleen\Downloads\Labhour-work\Labhour-work\frontend\src\context\SearchContext.jsx
+  3:14  error  Fast refresh only works when a file only exports components. Move your React context(s) to a separate file  react-refresh/only-export-components
+
+✖ 16 problems (14 errors, 2 warnings)
+
