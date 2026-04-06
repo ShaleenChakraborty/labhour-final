@@ -20,15 +20,6 @@ function Dashboard() {
     sessionStorage.setItem("splashShown", "true");
   }, []);
 
-  // 🔐 Protect route
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    const guest = localStorage.getItem("guest");
-
-    if (!token && !guest) {
-      navigate("/login", { replace: true });
-    }
-  }, [navigate]);
 
   return (
     <div className="dashboard">

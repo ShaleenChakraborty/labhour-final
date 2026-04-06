@@ -13,7 +13,16 @@ import Profile from "./Pages/Profile/Profile";
 import { SearchProvider } from "./context/SearchContext";
 import SplashOverlay from "./components/SplashOverlay/SplashOverlay";
 
+import { useEffect } from "react";
+
 function App() {
+  useEffect(() => {
+    // 🛡️ Initialize guest session for standalone deployment
+    if (!localStorage.getItem("guest") && !localStorage.getItem("token")) {
+      localStorage.setItem("guest", "true");
+    }
+  }, []);
+
   return (
     <SearchProvider>
       <SplashOverlay duration={4000} />
