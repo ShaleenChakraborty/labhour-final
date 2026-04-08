@@ -64,15 +64,7 @@ function MaterialSynthesize({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [coeffs]); // We only want this to run when the MATERIAL (coeffs) actually changes
 
-  // DIAGNOSTIC LOGGING for re-renders
-  const renderCount = useRef(0);
-  useEffect(() => {
-    renderCount.current += 1;
-    if (renderCount.current > 50) {
-      console.warn("MATERIAL SYNTHESIZE: High render count detected!", renderCount.current);
-    }
-    console.info(`MATERIAL SYNTHESIZE RENDER: #${renderCount.current} (Mode: ${mode}, ShowResults: ${showResults})`);
-  });
+
 
   const INTERCEPT = typeof intercept !== "undefined" ? intercept : 50;
   const BASE = base || {};

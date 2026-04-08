@@ -16,8 +16,14 @@
   --primary-l: 45%;
   
   --color-primary: hsl(var(--primary-h), var(--primary-s), var(--primary-l));
-  --color-primary-hover: hsl(var(--primary-h), var(--primary-s), 40%);
+  --color-primary-dark: hsl(var(--primary-h), var(--primary-s), 35%);
+  --color-primary-light: hsl(var(--primary-h), var(--primary-s), 65%);
   --color-primary-soft: hsla(var(--primary-h), var(--primary-s), var(--primary-l), 0.08);
+  
+  /* Modern Gradients */
+  --gradient-primary: linear-gradient(135deg, var(--color-primary), #6366f1);
+  --gradient-surface: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.4));
+  --gradient-glow: radial-gradient(circle at center, hsla(var(--primary-h), var(--primary-s), var(--primary-l), 0.15) 0%, transparent 70%);
 
   --color-bg: #f8fafc;
   --color-surface: #ffffff;
@@ -36,6 +42,8 @@
   --shadow-lg: 0 10px 25px -5px rgb(0 0 0 / 0.04), 0 8px 10px -6px rgb(0 0 0 / 0.04);
   --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
   --shadow-premium: 0 20px 40px -15px rgba(0, 0, 0, 0.1);
+  --shadow-glow: 0 0 20px 0 hsla(var(--primary-h), var(--primary-s), var(--primary-l), 0.3);
+  --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
   
   /* Glassmorphism */
   --glass-bg: rgba(255, 255, 255, 0.75);
@@ -52,6 +60,14 @@
   /* Transitions */
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Stagger Delays */
+  --delay-1: 100ms;
+  --delay-2: 200ms;
+  --delay-3: 300ms;
+  --delay-4: 400ms;
+  --delay-5: 500ms;
 }
 
 html,

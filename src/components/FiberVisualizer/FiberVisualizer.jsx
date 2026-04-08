@@ -40,12 +40,11 @@ function NanofiberWeb({ diameter, structure }) {
 
   const materialProps = {
     color: "#cbd5e1", 
-    emissive: "#0ea5e9",
-    emissiveIntensity: isCrystalline ? 0.2 : 0.05,
-    roughness: isCrystalline ? 0.15 : 0.8,
-    metalness: isCrystalline ? 0.9 : 0.2,
-    clearcoat: isCrystalline ? 1.0 : 0.0,
-    clearcoatRoughness: 0.1,
+    roughness: isCrystalline ? 0.2 : 0.6,
+    metalness: isCrystalline ? 0.8 : 0.1,
+    flatShading: isCrystalline,
+    emissive: "#ffffff",
+    emissiveIntensity: 0.02,
   };
 
   return (
@@ -182,27 +181,24 @@ export default function FiberVisualizer({ diameter, structure, voltage, distance
         
         <Canvas 
           camera={{ position: [0, 0, 8], fov: 45 }}
-          dpr={1} 
+          dpr={[1, 2]} 
           gl={{ 
             powerPreference: "high-performance",
-            antialias: false,
-            stencil: false,
-            depth: true
+            antialias: true,
           }}
           onCreated={({ gl }) => {
-            gl.setClearColor('#010409');
+            gl.setClearColor('#050505');
           }}
         >
-          <ambientLight intensity={0.5} />
-          <directionalLight position={[10, 10, 5]} intensity={1.5} color="#bae6fd" />
-          <pointLight position={[-10, 10, -5]} intensity={2} color="#0ea5e9" />
+          <color attach="background" args={["#050505"]} />
+          <fog attach="fog" args={["#050505", 5, 25]} />
           
-          <Stars radius={100} depth={50} count={1000} factor={4} saturation={0} fade speed={1} />
-          {/* Replaced heavy Environment with simpler lights for stability */}
-          <pointLight position={[0, 5, 10]} intensity={1} />
-          <pointLight position={[0, -5, -10]} intensity={0.5} color="#38bdf8" />
+          <ambientLight intensity={0.2} />
+          <directionalLight position={[10, 10, 5]} intensity={1} color="#ffffff" />
+          <pointLight position={[-10, 10, -5]} intensity={0.5} color="#ffffff" />
+          <pointLight position={[0, -5, 10]} intensity={1} color="#ffffff" />
 
-          <Float speed={1.5} rotationIntensity={0.5} floatIntensity={0.8}>
+          <Float speed={1.2} rotationIntensity={0.3} floatIntensity={0.5}>
             <NanofiberWeb diameter={diameter} structure={structure} />
           </Float>
 

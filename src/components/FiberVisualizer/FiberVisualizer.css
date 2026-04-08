@@ -1,42 +1,43 @@
 .fiber-visualizer-container {
   width: 100%;
-  margin-top: 15px;
-  background-color: #0d1117;
-  border-radius: 12px;
-  border: 1px solid #30363d;
+  margin-top: 24px;
+  background: var(--color-surface);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-border);
   overflow: hidden;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+  box-shadow: var(--shadow-xl);
   display: flex;
   flex-direction: column;
+  animation: fadeIn var(--transition-normal) forwards;
 }
 
 .visualizer-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 18px;
-  background: #161b22;
-  border-bottom: 1px solid #30363d;
+  padding: 14px 24px;
+  background: var(--color-surface-soft);
+  border-bottom: 1px solid var(--color-border-soft);
 }
 
 .visualizer-header h4 {
   margin: 0;
-  color: #c9d1d9;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1px;
+  color: var(--color-text-main);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  font-family: 'Inter', sans-serif;
 }
 
 .visualizer-badge {
-  background-color: rgba(69, 161, 255, 0.1);
-  color: #58a6ff;
-  padding: 3px 10px;
-  border-radius: 6px;
-  font-size: 9px;
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.7rem;
   font-weight: 700;
-  border: 1px solid rgba(88, 166, 255, 0.2);
+  letter-spacing: 0.02em;
+  border: 1px solid hsla(var(--primary-h), var(--primary-s), var(--primary-l), 0.1);
   margin: 0;
   text-transform: uppercase;
 }
@@ -44,9 +45,19 @@
 .canvas-wrapper {
   position: relative;
   width: 100%;
-  height: 480px; 
+  height: 520px; 
   cursor: grab;
   background-color: #010409;
+}
+
+.canvas-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.04;
+  pointer-events: none;
+  z-index: 2;
 }
 
 .canvas-wrapper:active {
@@ -59,23 +70,24 @@
   inset: 0;
   z-index: 5;
   pointer-events: none;
-  font-family: 'Courier New', Courier, monospace; /* Classic SEM Font */
+  font-family: 'Roboto Mono', 'Courier New', monospace;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 20px;
+  padding: 32px;
   color: #ffffff;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
 }
 
 .sem-header {
   display: flex;
-  gap: 24px;
-  background: rgba(0, 0, 0, 0.3);
-  padding: 8px 15px;
-  border-radius: 4px;
+  gap: 32px;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
   width: fit-content;
-  backdrop-filter: blur(2px);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .sem-item {
